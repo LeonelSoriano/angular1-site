@@ -15,7 +15,7 @@ angular.module('angular1SiteApp')
                 'Karma'
             ];
 
-            $scope.values = [{ id: '1', nombre: 'leonel', apellido: 'ape' }]
+            $scope.values = [{ id: '1', nombre: 'leonel', apellido: 'ape' }, { id: '2', nombre: 'sorianmo', apellido: 'ape' }]
         }
 
     ]);

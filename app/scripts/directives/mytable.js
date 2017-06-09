@@ -18,9 +18,12 @@ angular.module('angular1SiteApp')
             link: function(scope) {
 
                 scope.lengthColumn = 0;
+                scope.paginationButton = 0;
+
+                alert(scope.maxpage);
 
                 //defino el max page si no viene desde la directiva html
-                if (scope.maxpage === undefined || scope.maxpage !== null || !isNaN(maxpage.scope)) {
+                if (scope.maxpage === undefined || scope.maxpage !== null || !isNaN(scope.maxpage)) {
                     scope.maxpage = 10;
                 }
 
@@ -29,6 +32,8 @@ angular.module('angular1SiteApp')
                     console.warn("el valor de la tabla esta vacio");
                 } else {
                     scope.lengthColumn = Object.keys(scope.values[0]).length;
+                    scope.paginationButton = Math.floor(scope.values.length / scope.maxpage);
+
                 }
 
 
@@ -52,6 +57,7 @@ angular.module('angular1SiteApp')
     </table>  
 
 
+
     <div class="btn-toolbar" role="toolbar" >
       <div class="btn-group pull-right">
           <ul class="pagination" style="margin: 0;">
@@ -63,6 +69,12 @@ angular.module('angular1SiteApp')
           </ul>
       </div>
     </div>
+
+{{paginationButton}}
+  <div ng-repeat="n in [].constructor(paginationButton) track by $index">
+      {{ $index }}
+  </div>
+
 
   </div>`,
             restrict: 'AE'
