@@ -16,14 +16,13 @@ angular
         'ngRoute',
         'ngSanitize',
         'ngTouch',
-        'firebase'
+        'firebase',
+        'ui.bootstrap'
     ])
     .config(function($routeProvider, $locationProvider) {
 
 
         $locationProvider.hashPrefix('');
-
-
 
         $routeProvider
             .when('/main', {
@@ -39,6 +38,11 @@ angular
                 templateUrl: 'views/about.html',
                 controller: 'AboutCtrl',
                 controllerAs: 'about'
+            })
+            .when('/series', {
+              templateUrl: 'views/series.html',
+              controller: 'SeriesCtrl',
+              controllerAs: 'series'
             })
             .otherwise({
                 redirectTo: '/'
