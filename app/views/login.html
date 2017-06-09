@@ -1,5 +1,10 @@
 <div class="container">
+
     <div class="form-signin" ng-form name="userLogin" style="margin-top: 80px">
+        <div class="alert alert-danger" ng-show="msg">
+            No estas logeado para entrar a esta parte del sistema
+        </div>
+
         <h2 class="form-signin-heading">Login</h2>
         <label for="inputEmail" class="sr-only">Email address</label>
         <input id="inputEmail" class="form-control" placeholder="Email address" autofocus name="email" ng-model="email" type="email" required />

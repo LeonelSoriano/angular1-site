@@ -19,7 +19,12 @@ angular
         'firebase'
     ])
     .config(function($routeProvider, $locationProvider) {
+
+
         $locationProvider.hashPrefix('');
+
+
+
         $routeProvider
             .when('/main', {
                 templateUrl: 'views/main.html',
@@ -38,4 +43,22 @@ angular
             .otherwise({
                 redirectTo: '/'
             });
+
+
+    }).
+run(function($rootScope, $location, $cookies) {
+    $rootScope.$on("$routeChangeStart", function(event, next, current) {
+
+        var $cookies;
+        angular.injector(['ngCookies']).invoke(['$cookies', function(_$cookies_) {
+            $cookies = _$cookies_;
+        }]);
+        if ($location.path() !== '/login') {
+
+            if ($cookies.get('userLoger') === undefined || $cookies.get('userLoger') === null) {
+                $location.path("/login").search({ unautorizated: "true" });;
+            }
+        }
+
     });
+});
