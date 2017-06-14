@@ -60,7 +60,7 @@ run(function($rootScope, $location, $cookies) {
         if ($location.path() !== '/login') {
 
             if ($cookies.get('userLoger') === undefined || $cookies.get('userLoger') === null) {
-                $location.path("/login").search({ unautorizated: "true" });;
+                $location.path("/login").search({ unautorizated: "true" }); 
             }
         }
 

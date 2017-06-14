@@ -8,73 +8,87 @@
  */
 angular.module('angular1SiteApp')
     .directive('myTable', function() {
+        
         return {
             transclude: true,
             scope: {
                 sort: '@', //como lo ordeno
                 maxpage: '@', //cantidad por paginas
-                values: '=' //itenes para la tabla
+                values: '=', //itenes para la tabla
+                id: '@'
             },
-            link: function(scope) {
+            link: function(scope, elem, attrs) {
+
+                scope.filterTable = function(){
+                    var ex = [{ id: '1', nombre: 'leonel', apellido: 'ape' }, { id: '2', nombre: 'sorianmo', apellido: 'ape' }];
+                  
+                    var arrayFilter = ex.filter(function(item){  
+                        for (var key in item) {
+                            if (item.hasOwnProperty(key)){
+                              //  console.log(key, item[key]);
+                            }
+                        }
+                        return true;
+                    });
+                    console.log($);
+                    //console.log(arrayFilter);
+
+                };
+                scope.filterTable();
 
                 scope.lengthColumn = 0;
                 scope.paginationButton = 0;
 
-                alert(scope.maxpage);
+                //este me dice cual pagina corro
+                scope.actualIndex = 0;
 
                 //defino el max page si no viene desde la directiva html
-                if (scope.maxpage === undefined || scope.maxpage !== null || !isNaN(scope.maxpage)) {
+                if (scope.maxpage === undefined || scope.maxpage === null || isNaN(scope.maxpage)) {
                     scope.maxpage = 10;
                 }
-
+ 
                 //consigo la cnatidad de columnas en la tabla
                 if (scope.values.length <= 0) {
                     console.warn("el valor de la tabla esta vacio");
                 } else {
                     scope.lengthColumn = Object.keys(scope.values[0]).length;
                     scope.paginationButton = Math.floor(scope.values.length / scope.maxpage);
-
                 }
 
-
-
+                scope.onchangePage = function(index){
+                    scope.actualIndex = index;
+                };
 
             },
             template: `<div>
- <table class="table table-condensed">
+ <table class="table  table-bordered">
+    
     <thead>
-    <th ng-repeat="(z,y) in values[0]">
+    <th ng-repeat="(z,y) in values[0]" class="text-center" >
        {{z}}
+       <br/>
+       <input type="text" id="{{id}}tableinput{{z}}" style="width:70%" />
     </th>
     </thead>
-    <tbody ng-repeat="x in values">
+    <tbody ng-repeat="x in 
+        values.slice(actualIndex * maxpage ,(actualIndex * maxpage) + maxpage)">
      <tr>
-      <td ng-repeat="(key, val) in x">
+      <td ng-repeat="(key, val) in x " >
         {{val}}
       </td> 
      </tr>
     </tbody>
     </table>  
 
-
-
     <div class="btn-toolbar" role="toolbar" >
       <div class="btn-group pull-right">
           <ul class="pagination" style="margin: 0;">
-            <li><a href="javascript:void(0)">1</a></li>
-            <li><a href="javascript:void(0)">2</a></li>
-            <li><a href="javascript:void(0)">3</a></li>
-            <li><a href="javascript:void(0)">4</a></li>
-            <li><a href="javascript:void(0)">5</a></li>
+                <li ng-repeat="n in [].constructor(paginationButton) track by $index">
+                    <a ng-click="onchangePage($index)" href="javascript:void(0)">{{$index + 1}}</a>
+                </li>
           </ul>
       </div>
     </div>
-
-{{paginationButton}}
-  <div ng-repeat="n in [].constructor(paginationButton) track by $index">
-      {{ $index }}
-  </div>
-
 
   </div>`,
             restrict: 'AE'
