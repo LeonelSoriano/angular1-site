@@ -19,22 +19,61 @@ angular.module('angular1SiteApp')
             },
             link: function(scope, elem, attrs) {
 
+                scope.filterInputValues = [];
+
+                scope.valuesTmp = scope.values;
+
                 scope.filterTable = function(){
+                    scope.valuesTmp = scope.values;
+                    if(scope.filterInputValues.length === null || 
+                    scope.filterInputValues.length === undefined ||
+                    scope.filterInputValues.length == 0){
+                        scope.valuesTmp = scope.values;
+                        return;
+                    }
+
+                    //verifica si no se a usado algun filtro ais no usar los otros procesos si no se a llenado alguno
+                    var isNotFilter = false;
+                    for(var i = 0; i <= scope.filterInputValues.length; i++){
+                        if(scope.filterInputValues[i] !== undefined &&
+                            scope.filterInputValues[i].length != 0){
+                                i = scope.filterInputValues.length;
+                                isNotFilter = true;
+                            }
+                    }
+                    if(!isNotFilter){
+                        return;
+                    }
+                    
                     var ex = [{ id: '1', nombre: 'leonel', apellido: 'ape' }, { id: '2', nombre: 'sorianmo', apellido: 'ape' }];
                   
-                    var arrayFilter = ex.filter(function(item){  
+                    scope.valuesTmp = ex.filter(function(item){  
+                        var indexFilter = 0; //me indica el indice del input filter
+
                         for (var key in item) {
-                            if (item.hasOwnProperty(key)){
-                              //  console.log(key, item[key]);
+                            console.log("asd");
+                            if(scope.filterInputValues[indexFilter] === undefined || 
+                                scope.filterInputValues[indexFilter] == ''){
+                                indexFilter++;
+                                continue;
                             }
+                            //console.log("-> " + item[key] + "  " + scope.filterInputValues[indexFilter]);
+                            if(new RegExp(scope.filterInputValues[indexFilter]).test(item[key])){
+                                return true;
+                           }
+
+                           //console.log(" valor folter " + scope.filterInputValues[indexFilter]);
+                           // console.log(key, item[key]);
+                            if (item.hasOwnProperty(key)){
+                               // console.log(key, item[key]);
+                            }
+                            indexFilter++;
                         }
-                        return true;
+                        return false;
                     });
-                    console.log($);
-                    //console.log(arrayFilter);
 
                 };
-                scope.filterTable();
+                
 
                 scope.lengthColumn = 0;
                 scope.paginationButton = 0;
@@ -59,19 +98,23 @@ angular.module('angular1SiteApp')
                     scope.actualIndex = index;
                 };
 
+                scope.onFilter = function(){
+                    scope.filterTable();
+                }
+
             },
             template: `<div>
  <table class="table  table-bordered">
-    
     <thead>
     <th ng-repeat="(z,y) in values[0]" class="text-center" >
        {{z}}
        <br/>
-       <input type="text" id="{{id}}tableinput{{z}}" style="width:70%" />
+       <input type="text"   ng-model="filterInputValues[$index]" ng-keyup="onFilter()" 
+            style="width:70%" />
     </th>
     </thead>
     <tbody ng-repeat="x in 
-        values.slice(actualIndex * maxpage ,(actualIndex * maxpage) + maxpage)">
+        valuesTmp.slice(actualIndex * maxpage ,(actualIndex * maxpage) + maxpage)">
      <tr>
       <td ng-repeat="(key, val) in x " >
         {{val}}
