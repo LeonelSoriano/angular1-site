@@ -14,8 +14,21 @@ angular.module('angular1SiteApp')
                 'AngularJS',
                 'Karma'
             ];
-
+            $scope.mycont = true;
             $scope.values = [{ id: '1', nombre: 'leonel', apellido: 'ape' }, { id: '2', nombre: 'sorianmo', apellido: 'ape' }];
+
+             
+             $scope.btnclick = function() {
+               
+                 if($scope.mycont === true){
+                    $scope.mycont = false;
+                 }
+                else{
+        
+                    $scope.mycont = true;
+                }
+                   
+             }
         }
 
     ]);
