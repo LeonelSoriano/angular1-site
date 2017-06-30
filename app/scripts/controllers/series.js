@@ -15,7 +15,11 @@ angular.module('angular1SiteApp')
                 'Karma'
             ];
             $scope.mycont = true;
-            $scope.values = [{ id: '1', nombre: 'leonel', apellido: 'ape' }, { id: '2', nombre: 'sorianmo', apellido: 'ape' }];
+            $scope.values = [{ id: '1', nombre: 'leonel', apellido: 'ape' }
+            , { id: '2', nombre: 'sorianmo', apellido: 'ape' },{ id: '3', nombre: 'leonel', apellido: 'ape' },
+            { id: '4', nombre: 'leonel', apellido: 'ape' },{ id: '5', nombre: 'leonel', apellido: 'ape' },
+            { id: '6', nombre: 'leonel', apellido: 'ape' },{ id: '7', nombre: 'leonel', apellido: 'ape' },
+            { id: '8', nombre: 'leonel', apellido: 'ape' },{ id: '9', nombre: 'leonel', apellido: 'ape' }];
 
              
              $scope.btnclick = function() {

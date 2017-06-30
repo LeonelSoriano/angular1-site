@@ -20,6 +20,8 @@ angular.module('angular1SiteApp')
 
                 scope.filterInputValues = [];
 
+                scope.selectedColum = {};
+
                 scope.valuesTmp = scope.values;
 
                 scope.filterTable = function(){
@@ -50,7 +52,7 @@ angular.module('angular1SiteApp')
                         var indexFilter = 0; //me indica el indice del input filter
 
                         for (var key in item) {
-                            console.log("asd");
+                            
                             if(scope.filterInputValues[indexFilter] === undefined || 
                                 scope.filterInputValues[indexFilter] == ''){
                                 indexFilter++;
@@ -73,7 +75,6 @@ angular.module('angular1SiteApp')
 
                 };
                 
-
                 scope.lengthColumn = 0;
                 scope.paginationButton = 0;
 
@@ -101,28 +102,35 @@ angular.module('angular1SiteApp')
                     scope.filterTable();
                 }
 
+              
+              
             },
-            template: `<div>
-            
-            
-  <div ng-if="valuesTmp !==undefined"  >
-  
-    
-  </div>          
+            template: `<div>  
+  <simple-loader show-ajax="false">          
+        
  <table class="table  table-bordered">
     <thead>
+
     <th ng-repeat="(z,y) in values[0]" class="text-center" >
-       {{z}}
-       <br/>
-       <input type="text"   ng-model="filterInputValues[$index]" ng-keyup="onFilter()" 
+        <div ng-if="z != 'id'">
+               {{z}}
+            <br/>
+            <input type="text"   ng-model="filterInputValues[$index]" ng-keyup="onFilter()" 
             style="width:70%" />
+        </div>
     </th>
     </thead>
     <tbody ng-repeat="x in 
         valuesTmp.slice(actualIndex * maxpage ,(actualIndex * maxpage) + maxpage)">
      <tr>
+   
       <td ng-repeat="(key, val) in x " >
-        {{val}}
+        <div ng-if="key !== 'id'" >
+         {{val}}
+        </div>
+        <div ng-if="key === 'id'">
+            <input type="radio" ng-model="selectedColum.id"  value="{{val}}">
+        </div>
       </td> 
      </tr>
     </tbody>
@@ -136,8 +144,14 @@ angular.module('angular1SiteApp')
                 </li>
           </ul>
       </div>
+      <div>
+        <button class="btn btn-success" >Agregar</button>
+        <button class="btn btn-danger" style="margin-left: 10px;" >Eliminar</button>
+      </div>
+      
     </div>
 
+   </simple-loader> 
   </div>`,
             restrict: 'AE'
         };
