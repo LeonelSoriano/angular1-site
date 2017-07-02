@@ -14,10 +14,13 @@ angular.module('angular1SiteApp')
                 sort: '@', //como lo ordeno
                 maxpage: '@', //cantidad por paginas
                 values: '=', //itenes para la tabla
-                id: '@'
+                id: '@',
+                onRemove: '=',
+                onAdd: '=',
+                onUpdate: '='
             },
-            link: function(scope, elem, attrs) {
-
+            link: function(scope) {
+                
                 scope.filterInputValues = [];
 
                 scope.selectedColum = {};
@@ -28,7 +31,7 @@ angular.module('angular1SiteApp')
                     scope.valuesTmp = scope.values;
                     if(scope.filterInputValues.length === null || 
                     scope.filterInputValues.length === undefined ||
-                    scope.filterInputValues.length == 0){
+                    scope.filterInputValues.length === 0){
                         scope.valuesTmp = scope.values;
                         return;
                     }
@@ -37,7 +40,7 @@ angular.module('angular1SiteApp')
                     var isNotFilter = false;
                     for(var i = 0; i <= scope.filterInputValues.length; i++){
                         if(scope.filterInputValues[i] !== undefined &&
-                            scope.filterInputValues[i].length != 0){
+                            scope.filterInputValues[i].length !== 0){
                                 i = scope.filterInputValues.length;
                                 isNotFilter = true;
                             }
@@ -46,7 +49,7 @@ angular.module('angular1SiteApp')
                         return;
                     }
                     
-                    var ex = [{ id: '1', nombre: 'leonel', apellido: 'ape' }, { id: '2', nombre: 'sorianmo', apellido: 'ape' }];
+                    var ex = scope.values;
                   
                     scope.valuesTmp = ex.filter(function(item){  
                         var indexFilter = 0; //me indica el indice del input filter
@@ -54,17 +57,14 @@ angular.module('angular1SiteApp')
                         for (var key in item) {
                             
                             if(scope.filterInputValues[indexFilter] === undefined || 
-                                scope.filterInputValues[indexFilter] == ''){
+                                scope.filterInputValues[indexFilter] === ''){
                                 indexFilter++;
                                 continue;
                             }
-                            //console.log("-> " + item[key] + "  " + scope.filterInputValues[indexFilter]);
                             if(new RegExp(scope.filterInputValues[indexFilter]).test(item[key])){
                                 return true;
                            }
 
-                           //console.log(" valor folter " + scope.filterInputValues[indexFilter]);
-                           // console.log(key, item[key]);
                             if (item.hasOwnProperty(key)){
                                // console.log(key, item[key]);
                             }
@@ -100,10 +100,29 @@ angular.module('angular1SiteApp')
 
                 scope.onFilter = function(){
                     scope.filterTable();
-                }
+                };
 
-              
-              
+                //evento de remove
+                scope.onRemoveInternal = function(selected){
+                    if(selected !== undefined && scope.onRemove !== undefined){
+                        scope.onRemove(selected);
+                    }
+                };
+
+                //evento de agregar
+                scope.onAddInternal  = function(){ 
+                    if(scope.onAdd !== undefined){
+                        scope.onAdd();
+                    }
+                };
+
+                //evento de actualizar
+                scope.onUpdateInternal = function(selected){
+                    if(scope.onUpdate !== undefined){
+                        scope.onUpdate(selected);
+                    }
+                };
+
             },
             template: `<div>  
   <simple-loader show-ajax="false">          
@@ -145,8 +164,9 @@ angular.module('angular1SiteApp')
           </ul>
       </div>
       <div>
-        <button class="btn btn-success" >Agregar</button>
-        <button class="btn btn-danger" style="margin-left: 10px;" >Eliminar</button>
+        <button class="btn btn-success" ng-click="onAddInternal()" >Agregar</button>
+        <button class="btn btn-primary"  ng-show="selectedColum.id" style="margin-left: 10px;" ng-click="onUpdateInternal(selectedColum.id)" >Actualizar</button>
+        <button class="btn btn-danger" ng-click="onRemoveInternal(selectedColum.id)" style="margin-left: 10px;" >Eliminar</button>
       </div>
       
     </div>
