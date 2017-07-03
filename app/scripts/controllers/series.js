@@ -8,7 +8,8 @@
  * Controller of the angular1SiteApp
  */
 angular.module('angular1SiteApp')
-    .controller('SeriesCtrl', ['$scope','$firebaseArray', function($scope,$firebaseArray) {
+    .controller('SeriesCtrl', ['$scope','getResourcesFireBase', function($scope,
+        getResourcesFireBase) {
            
     
            
@@ -19,11 +20,16 @@ angular.module('angular1SiteApp')
                 'Karma'
             ];
             $scope.mycont = true;
-            $scope.values = [{ id: '1', nombre: 'leonel', apellido: 'ape' }
-            , { id: '2', nombre: 'sorianmo', apellido: 'ape' },{ id: '3', nombre: 'leonel', apellido: 'ape' },
-            { id: '4', nombre: 'leonel', apellido: 'ape' },{ id: '5', nombre: 'leonel', apellido: 'ape' },
-            { id: '6', nombre: 'leonel', apellido: 'ape' },{ id: '7', nombre: 'leonel', apellido: 'ape' },
-            { id: '8', nombre: 'leonel', apellido: 'ape' },{ id: '9', nombre: 'leonel', apellido: 'ape' }];
+            $scope.values = [];
+
+            getResourcesFireBase.someMethod("series",["gender","name","description"]).then(function(value){
+                //console.log(value);
+                $scope.values = value;
+            });
+
+
+
+
 
             $scope.onRemove = function(event){
                 console.log("removiendo desde el controller");
@@ -50,23 +56,8 @@ angular.module('angular1SiteApp')
                    */
              }
 
-         /*const rootRef = firebase.database().ref().child('series');
-        
-        this.object = $firebaseArray(rootRef);
-   
-this.object.$ref().once('value', function(snap) {
-    angular.forEach(snap.val(), function(index) {
-        console.log(index.gender)
-    })
-})*/
-
-
-
-
-
-
-
-            
+ 
         }
+
 
     ]);

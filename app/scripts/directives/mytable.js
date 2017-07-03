@@ -23,6 +23,8 @@ angular.module('angular1SiteApp')
 
                 scope.valuesTmp = scope.values;
 
+
+
                 scope.filterTable = function(){
                     scope.valuesTmp = scope.values;
                     if(scope.filterInputValues.length === null || 

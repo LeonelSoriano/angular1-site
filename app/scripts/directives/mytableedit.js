@@ -8,22 +8,8 @@
  */
 angular.module('angular1SiteApp')
   .directive('myTableEdit', function () {
-        return {
-            transclude: true,
-            scope: {
-                sort: '@', //como lo ordeno
-                maxpage: '@', //cantidad por paginas
-                values: '=', //itenes para la tabla
-                id: '@',
-                onRemove: '=',
-                onAdd: '=',
-                onUpdate: '='
-            },
-            link: function(scope) {
-                
-                scope.filterInputValues = [];
-
-                scope.selectedColum = {};
+     
+     function logicTable(scope){
 
                 scope.valuesTmp = scope.values;
 
@@ -49,7 +35,7 @@ angular.module('angular1SiteApp')
                         return;
                     }
                     
-                    var ex = scope.values;
+                    var ex = scope.valuesTmp;
                   
                     scope.valuesTmp = ex.filter(function(item){  
                         var indexFilter = 0; //me indica el indice del input filter
@@ -75,24 +61,55 @@ angular.module('angular1SiteApp')
 
                 };
                 
+                createPagination(scope);
+     };
+
+
+        function createPagination(scope){
+
+            //defino el max page si no viene desde la directiva html
+            if (scope.maxpage === undefined || scope.maxpage === null || isNaN(scope.maxpage)) {
+                scope.maxpage = 10;
+            }
+
+            //consigo la cnatidad de columnas en la tabla
+            if (scope.values.length <= 0) {
+                console.warn("el valor de la tabla esta vacio");
+            } else {
+                scope.lengthColumn = Object.keys(scope.values[0]).length;
+                scope.paginationButton = Math.floor(scope.valuesTmp.length / scope.maxpage);
+            }
+        };
+
+        return {
+            transclude: true,
+            scope: {
+                sort: '@', //como lo ordeno
+                maxpage: '@', //cantidad por paginas
+                values: '=', //itenes para la tabla
+                id: '@',
+                onRemove: '=',
+                onAdd: '=',
+                onUpdate: '=',
+                title: '@'
+            },
+            link: function(scope) {
+                scope.filterInputValues = [];
+
+                scope.selectedColum = {};
+
+                //index actual en la paginacion
+                scope.actualIndex = 0;
+                
+                //columnas de la tabla
                 scope.lengthColumn = 0;
+                //cantidad de botones ne la paginacion
                 scope.paginationButton = 0;
 
-                //este me dice cual pagina corro
-                scope.actualIndex = 0;
+                scope.$watch('values', function(val) {
+                    logicTable(scope);
+                });
 
-                //defino el max page si no viene desde la directiva html
-                if (scope.maxpage === undefined || scope.maxpage === null || isNaN(scope.maxpage)) {
-                    scope.maxpage = 10;
-                }
- 
-                //consigo la cnatidad de columnas en la tabla
-                if (scope.values.length <= 0) {
-                    console.warn("el valor de la tabla esta vacio");
-                } else {
-                    scope.lengthColumn = Object.keys(scope.values[0]).length;
-                    scope.paginationButton = Math.floor(scope.values.length / scope.maxpage);
-                }
 
                 scope.onchangePage = function(index){
                     scope.actualIndex = index;
@@ -100,6 +117,7 @@ angular.module('angular1SiteApp')
 
                 scope.onFilter = function(){
                     scope.filterTable();
+                    createPagination(scope);    
                 };
 
                 //evento de remove
@@ -122,11 +140,10 @@ angular.module('angular1SiteApp')
                         scope.onUpdate(selected);
                     }
                 };
-
             },
             template: `<div>  
   <simple-loader show-ajax="false">          
-        
+  <h1 class="text-center">{{title}}</h1>
  <table class="table  table-bordered">
     <thead>
 
