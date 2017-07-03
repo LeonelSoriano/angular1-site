@@ -8,12 +8,12 @@
  * Controller of the angular1SiteApp
  */
 angular.module('angular1SiteApp')
-    .controller('SeriesCtrl', ['$scope','getResourcesFireBase', function($scope,
-        getResourcesFireBase) {
-           
-    
-           
-           
+    .controller('SeriesCtrl', ['$scope', 'getResourcesFireBase', function($scope,
+            getResourcesFireBase) {
+
+
+            $scope.dialogCreate = {};
+
             this.awesomeThings = [
                 'HTML5 Boilerplate',
                 'AngularJS',
@@ -22,31 +22,36 @@ angular.module('angular1SiteApp')
             $scope.mycont = true;
             $scope.values = [];
 
-            getResourcesFireBase.someMethod("series",["gender","name","description"]).then(function(value){
-                //console.log(value);
+            getResourcesFireBase.getAll("series", ["gender", "name", "description"]).then(function(value) {
                 $scope.values = value;
+            });
+
+
+            $scope.modelSeriesTypes = [];
+            $scope.modelSeriesSelect = 'NULL';
+            getResourcesFireBase.getAll("config/option_serie_type", null).then(function(values) {
+                $scope.modelSeriesTypes = values;
             });
 
 
 
 
-
-            $scope.onRemove = function(event){
+            $scope.onRemove = function(event) {
                 console.log("removiendo desde el controller");
             }
-            $scope.onAdd = function(selected){
-                console.log("agregando un item");
+            $scope.onAdd = function(selected) {
+                $scope.dialogCreate.open();
             }
 
-            $scope.onUpdate = function(selected){
+            $scope.onUpdate = function(selected) {
                 console.log(selected);
             }
 
             $scope.dialogModel = {};
 
-             $scope.btnclick = function() {
-               $scope.dialogModel.open();
-            /*     if($scope.mycont === true){
+            $scope.btnclick = function() {
+                $scope.dialogModel.open();
+                /*     if($scope.mycont === true){
                     $scope.mycont = false;
                  }
                 else{
@@ -54,9 +59,9 @@ angular.module('angular1SiteApp')
                     $scope.mycont = true;
                 }
                    */
-             }
+            }
 
- 
+
         }
 
 

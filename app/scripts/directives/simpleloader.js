@@ -7,10 +7,10 @@
  * # simpleLoader
  */
 angular.module('angular1SiteApp')
-  .directive('simpleLoader', function () {
+    .directive('simpleLoader', function() {
         return {
             scope: {
-                showAjax : '='
+                showAjax: '='
             },
             restrict: 'E',
             transclude: true,
@@ -22,4 +22,4 @@ angular.module('angular1SiteApp')
             </div>
             `,
         };
-  });
+    });

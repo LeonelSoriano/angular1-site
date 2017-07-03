@@ -3,20 +3,21 @@
 
 
 <!--<my-table sort="nombre" maxpage="1" values="values" id="ejemplo" ></my-table>-->
-<my-table-edit title="Series" on-remove="onRemove" on-update="onUpdate" on-add="onAdd" sort="nombre" maxpage="8" values="values" id="ejemplo2"   ></my-table-edit> 
+<my-table-edit title="Series" on-remove="onRemove" on-update="onUpdate" on-add="onAdd" sort="nombre" maxpage="8" values="values" id="ejemplo2"></my-table-edit>
 
 
-<boostrap-dialog type-dialog="lg" title="soy un titulo"
-    dialog-model="dialogModel" modal-id="modal" >
-    este es un dialog
-
+<boostrap-dialog type-dialog="lg" title="Crear nueva serie" dialog-model="dialogCreate" modal-id="modal-create">
+    <div class="form-group">
+        <label for="select-serie">Email address:</label>
+        <select id="select-serie" ng-model="modelSeriesSelect" name="select-serie" class="form-control">
+            <option value="NULL">Seleccione una serie</option>
+            <option ng-repeat="option in modelSeriesTypes" value="{{option.id}}">{{option.name}}</option>
+        </select>
+    </div>
 </boostrap-dialog>
 
 
 <div ng-include="'views/template/footer.html'"></div>
 
 
-<input type="button" value="click" ng-click="btnclick()"/>
-
-
-
+<input type="button" value="click" ng-click="btnclick()" />

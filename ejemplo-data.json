@@ -1,9 +1,19 @@
 {
-  "series": {
-    "-JRHTHaIs-jNPLXOQivY": {
-      "name": "gracehop",
-      "gender": "ejemplo",
-      "description": "es una description"
+    "config": {
+        "option_serie_type": {
+            "1": {
+                "name": "Terror"
+            },
+            "2": {
+                "name": "Belica"
+            }
+        }
+    },
+    "series": {
+        "-JRHTHaIs-jNPLXOQivY": {
+            "name": "gracehop",
+            "gender": "ejemplo",
+            "description": "es una description"
+        }
     }
-  }
 }

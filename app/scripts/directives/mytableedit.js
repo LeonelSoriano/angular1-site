@@ -7,65 +7,65 @@
  * # myTableEdit
  */
 angular.module('angular1SiteApp')
-  .directive('myTableEdit', function () {
-     
-     function logicTable(scope){
+    .directive('myTableEdit', function() {
 
+        function logicTable(scope) {
+
+            scope.valuesTmp = scope.values;
+
+            scope.filterTable = function() {
                 scope.valuesTmp = scope.values;
-
-                scope.filterTable = function(){
-                    scope.valuesTmp = scope.values;
-                    if(scope.filterInputValues.length === null || 
+                if (scope.filterInputValues.length === null ||
                     scope.filterInputValues.length === undefined ||
-                    scope.filterInputValues.length === 0){
-                        scope.valuesTmp = scope.values;
-                        return;
-                    }
+                    scope.filterInputValues.length === 0) {
+                    scope.valuesTmp = scope.values;
+                    return;
+                }
 
-                    //verifica si no se a usado algun filtro ais no usar los otros procesos si no se a llenado alguno
-                    var isNotFilter = false;
-                    for(var i = 0; i <= scope.filterInputValues.length; i++){
-                        if(scope.filterInputValues[i] !== undefined &&
-                            scope.filterInputValues[i].length !== 0){
-                                i = scope.filterInputValues.length;
-                                isNotFilter = true;
-                            }
+                //verifica si no se a usado algun filtro ais no usar los otros procesos si no se a llenado alguno
+                var isNotFilter = false;
+                for (var i = 0; i <= scope.filterInputValues.length; i++) {
+                    if (scope.filterInputValues[i] !== undefined &&
+                        scope.filterInputValues[i].length !== 0) {
+                        i = scope.filterInputValues.length;
+                        isNotFilter = true;
                     }
-                    if(!isNotFilter){
-                        return;
-                    }
-                    
-                    var ex = scope.valuesTmp;
-                  
-                    scope.valuesTmp = ex.filter(function(item){  
-                        var indexFilter = 0; //me indica el indice del input filter
+                }
+                if (!isNotFilter) {
+                    return;
+                }
 
-                        for (var key in item) {
-                            
-                            if(scope.filterInputValues[indexFilter] === undefined || 
-                                scope.filterInputValues[indexFilter] === ''){
-                                indexFilter++;
-                                continue;
-                            }
-                            if(new RegExp(scope.filterInputValues[indexFilter]).test(item[key])){
-                                return true;
-                           }
+                var ex = scope.valuesTmp;
 
-                            if (item.hasOwnProperty(key)){
-                               // console.log(key, item[key]);
-                            }
+                scope.valuesTmp = ex.filter(function(item) {
+                    var indexFilter = 0; //me indica el indice del input filter
+
+                    for (var key in item) {
+
+                        if (scope.filterInputValues[indexFilter] === undefined ||
+                            scope.filterInputValues[indexFilter] === '') {
                             indexFilter++;
+                            continue;
                         }
-                        return false;
-                    });
+                        if (new RegExp(scope.filterInputValues[indexFilter]).test(item[key])) {
+                            return true;
+                        }
 
-                };
-                
-                createPagination(scope);
-     };
+                        if (item.hasOwnProperty(key)) {
+                            // console.log(key, item[key]);
+                        }
+                        indexFilter++;
+                    }
+                    return false;
+                });
+
+            };
+
+            createPagination(scope);
+        };
 
 
-        function createPagination(scope){
+        function createPagination(scope) {
 
             //defino el max page si no viene desde la directiva html
             if (scope.maxpage === undefined || scope.maxpage === null || isNaN(scope.maxpage)) {
@@ -100,7 +100,7 @@ angular.module('angular1SiteApp')
 
                 //index actual en la paginacion
                 scope.actualIndex = 0;
-                
+
                 //columnas de la tabla
                 scope.lengthColumn = 0;
                 //cantidad de botones ne la paginacion
@@ -111,42 +111,46 @@ angular.module('angular1SiteApp')
                 });
 
 
-                scope.onchangePage = function(index){
+                scope.onchangePage = function(index) {
                     scope.actualIndex = index;
                 };
 
-                scope.onFilter = function(){
+                scope.onFilter = function() {
                     scope.filterTable();
-                    createPagination(scope);    
+                    createPagination(scope);
                 };
 
                 //evento de remove
-                scope.onRemoveInternal = function(selected){
-                    if(selected !== undefined && scope.onRemove !== undefined){
+                scope.onRemoveInternal = function(selected) {
+                    if (selected !== undefined && scope.onRemove !== undefined) {
                         scope.onRemove(selected);
                     }
                 };
 
                 //evento de agregar
-                scope.onAddInternal  = function(){ 
-                    if(scope.onAdd !== undefined){
+                scope.onAddInternal = function() {
+                    if (scope.onAdd !== undefined) {
                         scope.onAdd();
                     }
                 };
 
                 //evento de actualizar
-                scope.onUpdateInternal = function(selected){
-                    if(scope.onUpdate !== undefined){
+                scope.onUpdateInternal = function(selected) {
+                    if (scope.onUpdate !== undefined) {
                         scope.onUpdate(selected);
                     }
                 };
+
+                scope.getHide = function() {
+                    return (scope.values === undefined || scope.values.length == 0) ? true : false;
+                }
             },
             template: `<div>  
-  <simple-loader show-ajax="false">          
+            
+  <simple-loader show-ajax="getHide()">          
   <h1 class="text-center">{{title}}</h1>
  <table class="table  table-bordered">
     <thead>
-
     <th ng-repeat="(z,y) in values[0]" class="text-center" >
         <div ng-if="z != 'id'">
                {{z}}
@@ -171,8 +175,7 @@ angular.module('angular1SiteApp')
      </tr>
     </tbody>
     </table>  
-
-    <div class="btn-toolbar" role="toolbar" >
+    <div class="btn-toolbar" role="toolbar" style="margin-bottom: 8px;">
       <div class="btn-group pull-right">
           <ul class="pagination" style="margin: 0;">
                 <li ng-repeat="n in [].constructor(paginationButton) track by $index">
@@ -180,7 +183,7 @@ angular.module('angular1SiteApp')
                 </li>
           </ul>
       </div>
-      <div>
+      <div >
         <button class="btn btn-success" ng-click="onAddInternal()" >Agregar</button>
         <button class="btn btn-primary"  ng-show="selectedColum.id" style="margin-left: 10px;" ng-click="onUpdateInternal(selectedColum.id)" >Actualizar</button>
         <button class="btn btn-danger" ng-click="onRemoveInternal(selectedColum.id)" style="margin-left: 10px;" >Eliminar</button>
