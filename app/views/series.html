@@ -7,13 +7,44 @@
 
 
 <boostrap-dialog type-dialog="lg" title="Crear nueva serie" dialog-model="dialogCreate" modal-id="modal-create">
-    <div class="form-group">
-        <label for="select-serie">Email address:</label>
-        <select id="select-serie" ng-model="modelSeriesSelect" name="select-serie" class="form-control">
-            <option value="NULL">Seleccione una serie</option>
-            <option ng-repeat="option in modelSeriesTypes" value="{{option.id}}">{{option.name}}</option>
-        </select>
+
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            <div class="form-group">
+                <label for="select-serie">Email address:</label>
+                <select id="select-serie" ng-model="modelSeriesSelect" name="select-serie" class="form-control">
+                    <option value="NULL">Seleccione una serie</option>
+                    <option ng-repeat="option in modelSeriesTypes" value="{{option.id}}">{{option.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-1"></div>
     </div>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10"> 
+            <label for="name-create">Nombre</label>
+            <input style="width:100%" type="text" class="form-control" name="name-create" />
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+    <br>
+    <div class="row from-group">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+            <label for="description-create">Descripcion</label>
+            <textarea id="description-create" class="form-control" name="description-create" cols="30" rows="6"></textarea>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-12">
+            <button class="btn btn-success pull-right">Crear</button> 
+        </div>
+    </div>
+
 </boostrap-dialog>
 
 

@@ -9,6 +9,23 @@
 angular.module('angular1SiteApp')
     .directive('myTableEdit', function() {
 
+        function createPagination(scope) {
+
+            //defino el max page si no viene desde la directiva html
+            if (scope.maxpage === undefined || scope.maxpage === null || isNaN(scope.maxpage)) {
+                scope.maxpage = 10;
+            }
+
+            //consigo la cnatidad de columnas en la tabla
+            if (scope.values.length <= 0) {
+                console.warn("el valor de la tabla esta vacio");
+            } else {
+                scope.lengthColumn = Object.keys(scope.values[0]).length;
+                scope.paginationButton = Math.floor(scope.valuesTmp.length / scope.maxpage);
+            }
+        }
+
+
         function logicTable(scope) {
 
             scope.valuesTmp = scope.values;
@@ -62,24 +79,8 @@ angular.module('angular1SiteApp')
             };
 
             createPagination(scope);
-        };
+        }
 
-
-        function createPagination(scope) {
-
-            //defino el max page si no viene desde la directiva html
-            if (scope.maxpage === undefined || scope.maxpage === null || isNaN(scope.maxpage)) {
-                scope.maxpage = 10;
-            }
-
-            //consigo la cnatidad de columnas en la tabla
-            if (scope.values.length <= 0) {
-                console.warn("el valor de la tabla esta vacio");
-            } else {
-                scope.lengthColumn = Object.keys(scope.values[0]).length;
-                scope.paginationButton = Math.floor(scope.valuesTmp.length / scope.maxpage);
-            }
-        };
 
         return {
             transclude: true,
@@ -106,7 +107,7 @@ angular.module('angular1SiteApp')
                 //cantidad de botones ne la paginacion
                 scope.paginationButton = 0;
 
-                scope.$watch('values', function(val) {
+                scope.$watch('values', function() {
                     logicTable(scope);
                 });
 
@@ -142,8 +143,8 @@ angular.module('angular1SiteApp')
                 };
 
                 scope.getHide = function() {
-                    return (scope.values === undefined || scope.values.length == 0) ? true : false;
-                }
+                    return (scope.values === undefined || scope.values.length === 0) ? true : false;
+                };
             },
             template: `<div>  
             
