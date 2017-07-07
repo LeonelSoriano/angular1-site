@@ -14,10 +14,12 @@ angular.module('angular1SiteApp')
             //defino el max page si no viene desde la directiva html
             if (scope.maxpage === undefined || scope.maxpage === null || isNaN(scope.maxpage)) {
                 scope.maxpage = 10;
+            } else {
+                scope.maxpage = Number(scope.maxpage);
             }
 
             //consigo la cnatidad de columnas en la tabla
-            if (scope.values.length <= 0) {
+            if (scope.values == null || scope.values.length <= 0) {
                 console.warn("el valor de la tabla esta vacio");
             } else {
                 scope.lengthColumn = Object.keys(scope.values[0]).length;
@@ -32,7 +34,7 @@ angular.module('angular1SiteApp')
 
             scope.filterTable = function() {
                 scope.valuesTmp = scope.values;
-                if (scope.filterInputValues.length === null ||
+                if (scope.filterInputValues === null || scope.filterInputValues.length === null ||
                     scope.filterInputValues.length === undefined ||
                     scope.filterInputValues.length === 0) {
                     scope.valuesTmp = scope.values;
@@ -124,6 +126,8 @@ angular.module('angular1SiteApp')
                 //evento de remove
                 scope.onRemoveInternal = function(selected) {
                     if (selected !== undefined && scope.onRemove !== undefined) {
+                        scope.values = null;
+                        scope.selectedColum.id = null;
                         scope.onRemove(selected);
                     }
                 };
@@ -143,7 +147,8 @@ angular.module('angular1SiteApp')
                 };
 
                 scope.getHide = function() {
-                    return (scope.values === undefined || scope.values.length === 0) ? true : false;
+                    console.log();
+                    return (scope.values === undefined || scope.values === null || scope.values.length === null) ? true : false;
                 };
             },
             template: `<div>  
@@ -164,8 +169,9 @@ angular.module('angular1SiteApp')
     <tbody ng-repeat="x in 
         valuesTmp.slice(actualIndex * maxpage ,(actualIndex * maxpage) + maxpage)">
      <tr>
-   
+
       <td ng-repeat="(key, val) in x " >
+
         <div ng-if="key !== 'id'" >
          {{val}}
         </div>
@@ -179,7 +185,7 @@ angular.module('angular1SiteApp')
     <div class="btn-toolbar" role="toolbar" style="margin-bottom: 8px;">
       <div class="btn-group pull-right">
           <ul class="pagination" style="margin: 0;">
-                <li ng-repeat="n in [].constructor(paginationButton) track by $index">
+                <li ng-repeat="n in [].constructor(paginationButton+1) track by $index">
                     <a ng-click="onchangePage($index)" href="javascript:void(0)">{{$index + 1}}</a>
                 </li>
           </ul>
@@ -187,7 +193,7 @@ angular.module('angular1SiteApp')
       <div >
         <button class="btn btn-success" ng-click="onAddInternal()" >Agregar</button>
         <button class="btn btn-primary"  ng-show="selectedColum.id" style="margin-left: 10px;" ng-click="onUpdateInternal(selectedColum.id)" >Actualizar</button>
-        <button class="btn btn-danger" ng-click="onRemoveInternal(selectedColum.id)" style="margin-left: 10px;" >Eliminar</button>
+        <button class="btn btn-danger"  ng-show="selectedColum.id" ng-click="onRemoveInternal(selectedColum.id)" style="margin-left: 10px;" >Eliminar</button>
       </div>
       
     </div>

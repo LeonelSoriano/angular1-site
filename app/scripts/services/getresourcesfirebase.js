@@ -8,25 +8,41 @@
  * Factory in the angular1SiteApp.
  */
 angular.module('angular1SiteApp')
-    .factory('getResourcesFireBase', ["$firebaseArray","$firebaseObject", function($firebaseArray, $firebaseObject) {
+    .factory('getResourcesFireBase', ["$firebaseArray", "$firebaseObject", function($firebaseArray, $firebaseObject) {
 
         return {
-            save: function(ref,data,success,error){
+
+            remove: function(ref, id, success, error) {
+                firebase.database().ref().child(ref).child(id).remove().then(function(ref) {
+                    console.log("Eliminado correctamente");
+                    if (success !== undefined && success !== null) {
+                        success();
+                    }
+
+                }, function(error) {
+                    console.log("error en guadar " + error);
+                    if (error !== undefined && error !== null) {
+                        error();
+                    }
+                });
+
+            },
+            save: function(ref, data, success, error) {
                 firebase.database().ref().child(ref).push(
                     data
                 ).then(function(ref) {
                     console.log("bien " + ref.key);
-                    if(success !== undefined && success !== null){
+                    if (success !== undefined && success !== null) {
                         success();
                     }
                 }, function(error) {
                     console.log("error en guadar " + error);
-                    if(error !== undefined && error !== null){
+                    if (error !== undefined && error !== null) {
                         error();
                     }
                 });
-            }
-            ,getAll: function(ref, normalize) {
+            },
+            getAll: function(ref, normalize) {
                     const rootRef = firebase.database().ref().child(ref);
                     this.object = $firebaseArray(rootRef);
                     var self = this;
