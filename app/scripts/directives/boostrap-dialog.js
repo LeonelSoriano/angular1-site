@@ -14,6 +14,7 @@ angular.module('angular1SiteApp')
                 title: '@',
                 dialogModel: '=',
                 modalId: '@',
+                onClose: '&'
             },
             transclude: true,
             replace: true,
@@ -24,19 +25,33 @@ angular.module('angular1SiteApp')
                     throw "problema en el dialogo debe tener obligatoria mente un id";
                 } else {
 
-                    if (attrs.typeDialog === undefined || (attrs.typeDialog != 'lg' && attrs.typeDialog != 'sm')) {
+                    if (attrs.typeDialog === undefined || (attrs.typeDialog != 'lg' &&
+                        attrs.typeDialog != 'sm')) {
                         attrs.typeDialog = 'lg';
                     }
                     attrs.typeDialog = 'modal-' + attrs.typeDialog;
 
 
                     scope.dialogModel.open = function() {
+ 
                         $('#' + scope.modalId).modal('show');
                     }
 
                     scope.dialogModel.close = function() {
                         $('#' + scope.modalId).modal('hide');
                     }
+
+
+                    $( document ).ready(function() {
+                        $("#"+ scope.modalId).on("hidden.bs.modal", function () {
+                            if(scope.onClose !== undefined && scope.onClose !== null){
+                                scope.onClose();
+                            }
+                        }); 
+
+                    });
+
+                                    
 
                 } //end else
             },

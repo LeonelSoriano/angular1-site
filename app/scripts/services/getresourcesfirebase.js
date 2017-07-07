@@ -8,15 +8,25 @@
  * Factory in the angular1SiteApp.
  */
 angular.module('angular1SiteApp')
-    .factory('getResourcesFireBase', ["$firebaseArray", function($firebaseArray) {
-        // Service logic
-        // ...
+    .factory('getResourcesFireBase', ["$firebaseArray","$firebaseObject", function($firebaseArray, $firebaseObject) {
 
-        var meaningOfLife = 42;
-
-        // Public API here
         return {
-            getAll: function(ref, normalize) {
+            save: function(ref,data,success,error){
+                firebase.database().ref().child(ref).push(
+                    data
+                ).then(function(ref) {
+                    console.log("bien " + ref.key);
+                    if(success !== undefined && success !== null){
+                        success();
+                    }
+                }, function(error) {
+                    console.log("error en guadar " + error);
+                    if(error !== undefined && error !== null){
+                        error();
+                    }
+                });
+            }
+            ,getAll: function(ref, normalize) {
                     const rootRef = firebase.database().ref().child(ref);
                     this.object = $firebaseArray(rootRef);
                     var self = this;
@@ -31,13 +41,13 @@ angular.module('angular1SiteApp')
                     return new Promise(function(resolve) {
                         var responseValues = [];
                         self.object.$ref().once('value', function(snap) {
-                            console.log(snap.val());
+                            //console.log(snap.val());
                             angular.forEach(snap.val(), function(value, key) {
                                 var tmpValue = {};
                                 tmpValue.id = key;
                                 if (normalize === undefined || normalize === null) {
-                                    for (var key in value) {
-                                        tmpValue[key] = value[key];
+                                    for (var tmpKey in value) {
+                                        tmpValue[tmpKey] = value[tmpKey];
                                     }
                                 } else {
                                     normalize.forEach(function(valIndex) {
@@ -53,10 +63,8 @@ angular.module('angular1SiteApp')
                                 responseValues.push(tmpValue);
                             });
 
-
-                            // for (var prop in value) {
                             resolve(responseValues);
-                        })
+                        });
                     });
 
 

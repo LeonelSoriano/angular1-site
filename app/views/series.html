@@ -8,42 +8,69 @@
 
 <boostrap-dialog type-dialog="lg" title="Crear nueva serie" dialog-model="dialogCreate" modal-id="modal-create">
 
-    <div class="row">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-10">
-            <div class="form-group">
-                <label for="select-serie">Email address:</label>
-                <select id="select-serie" ng-model="modelSeriesSelect" name="select-serie" class="form-control">
-                    <option value="NULL">Seleccione una serie</option>
-                    <option ng-repeat="option in modelSeriesTypes" value="{{option.id}}">{{option.name}}</option>
-                </select>
+    <div ng-form="serieCreate" id="serieCreate">
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10"> 
+                <label for="name-create">Nombre*</label>
+                <input style="width:100%" title="" type="text" class="form-control" ng-model="modelCreate.name" name="nameSerieCreate" 
+                    ng-minlength="3" ng-maxlength="64" required/>
+                <br>
+                <span class="form-error" ng-show="serieCreate.nameSerieCreate.$dirty && serieCreate.nameSerieCreate.$invalid" 
+                                         > Tienes Errores (req,min=3,max=64)</span>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+        <br>
+
+        <div class="row" >
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <div class="form-group">
+                    <label for="select-serie">Typo de serie*</label>
+                    <select  id="select-serie" ng-model="modelCreate.type" name="selectSerie" class="form-control" required>
+                        <option value="">Seleccione una serie</option>
+                        <option ng-repeat="option in modelSeriesTypes" value="{{option.id}}">{{option.name}}</option>
+                    </select>
+                    <br>
+                    <span class="form-error" ng-show="serieCreate.selectSerie.$invalid" >Tienes errores (req)</span>
+                </div>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+
+
+
+        <div class="row from-group">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-10">
+                <label for="description-create">Descripcion</label>
+                <textarea id="description-create" class="form-control" ng-maxlength="255" ng-model="modelCreate.description"
+                    name="descriptionCreate" cols="30" rows="6"></textarea>
+                <br>
+                 <span class="form-error"  ng-show="serieCreate.descriptionCreate.$invalid"  >Tienes errores (max=255)</span>
+            </div>
+            <div class="col-sm-1"></div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-12">
+                <button class="btn btn-success pull-right" 
+                    ng-disabled="(serieCreate.nameSerieCreate.$pristine || serieCreate.nameSerieCreate.$invalid) ||
+                    (serieCreate.selectSerie.$pristine || serieCreate.selectSerie.$invalid)"
+                    >Guardar</button> 
+                
             </div>
         </div>
-        <div class="col-sm-1"></div>
     </div>
-    <div class="row">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-10"> 
-            <label for="name-create">Nombre</label>
-            <input style="width:100%" type="text" class="form-control" name="name-create" />
-        </div>
-        <div class="col-sm-1"></div>
-    </div>
-    <br>
-    <div class="row from-group">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-10">
-            <label for="description-create">Descripcion</label>
-            <textarea id="description-create" class="form-control" name="description-create" cols="30" rows="6"></textarea>
-        </div>
-        <div class="col-sm-1"></div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-sm-12">
-            <button class="btn btn-success pull-right">Crear</button> 
-        </div>
-    </div>
+
+
+    
+
+    <form name="form.theForm">
+        <input name="myName" type="text" ng-model="model.name" />
+        <input type="button" value="Here the scope" ng-click="display()"/>
+    </form>
 
 </boostrap-dialog>
 
@@ -52,3 +79,6 @@
 
 
 <input type="button" value="click" ng-click="btnclick()" />
+
+
+

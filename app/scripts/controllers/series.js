@@ -11,14 +11,32 @@ angular.module('angular1SiteApp')
     .controller('SeriesCtrl', ['$scope', 'getResourcesFireBase', function($scope,
             getResourcesFireBase) {
 
-
+            //este mapea los evento y funcionalidades del dialogo de creado
             $scope.dialogCreate = {};
 
-            this.awesomeThings = [
-                'HTML5 Boilerplate',
-                'AngularJS',
-                'Karma'
-            ];
+            
+
+$scope.user = {
+    firstName: "Scott",
+    lastName: "Allen"
+};
+ 
+$scope.originalUser = angular.copy($scope.user);
+ 
+$scope.reset = function(){
+    $scope.user = angular.copy($scope.originalUser);
+    $scope.editUserForm.$setPristine();
+};
+
+
+            
+            //este es el modelo del dialog del create
+            $scope.modelCreate = {
+                email: 'NULL',
+                name: '',
+                description: '',
+            };
+
             $scope.mycont = true;
             $scope.values = [];
 
@@ -28,24 +46,36 @@ angular.module('angular1SiteApp')
 
 
             $scope.modelSeriesTypes = [];
-            $scope.modelSeriesSelect = 'NULL';
             getResourcesFireBase.getAll("config/option_serie_type", null).then(function(values) {
                 $scope.modelSeriesTypes = values;
             });
 
-
+        //getResourcesFireBase.save("hola");
 
 
             $scope.onRemove = function(event) {
                 console.log("removiendo desde el controller");
-            }
-            $scope.onAdd = function(selected) {
+            };
+
+            $scope.onAdd = function() {
+
+                $scope.modelCreate = {
+                    type: '',
+                    name: '',
+                    description: '',
+                };
+                
+                
+              //  console.log(serieCreate.nameSerieCreate);
+               // $('#form-create').trigger("reset");
                 $scope.dialogCreate.open();
-            }
+            };
+
+          
 
             $scope.onUpdate = function(selected) {
                 console.log(selected);
-            }
+            };
 
             $scope.dialogModel = {};
 
@@ -59,8 +89,7 @@ angular.module('angular1SiteApp')
                     $scope.mycont = true;
                 }
                    */
-            }
-
+            };
 
         }
 
